@@ -26,6 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
       const authReq = req.clone({ headers });
       return next.handle(authReq).do(() => {}, error => {
         var respError = error as HttpErrorResponse;
+        //***** Handling 401 (Unauthorized - think unauthenticated)  403 (forbidden - think unauthorized) ************************
         if (respError && (respError.status === 401 || respError.status === 403)) {
           this._router.navigate(['/unauthorized']);
         }
