@@ -35,11 +35,8 @@ export class AppComponent implements OnInit {
     */
     if (window.location.href.indexOf('?postLogout=true') > 0) {
       this._authService.signoutRedirectCallback().then(() => {
-        let url: string = this._router.url.substring(
-          0,
-          this._router.url.indexOf('?')
-        );
-        this._router.navigateByUrl(url);
+        let url: string = this._router.url.substring(0, this._router.url.indexOf('?'));    /* slicing out the query param */
+        this._router.navigateByUrl(url);                                                   /* and routing to the url */
       });
     }
   }
