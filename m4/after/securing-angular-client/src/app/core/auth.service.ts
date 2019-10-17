@@ -55,6 +55,11 @@ export class AuthService {
         this.loadSecurityContext();
       }
     });
+    
+    /**** Anytime the oidc-client.js gets hold of a set of tokens (either when you login or if an automatic silent renew happens)
+          it raises the assUserLoaded event and we can provide an event handler which can take the new user object (it has all the 
+          goodies) and place it in a property in our service (_user) so anyone interested can have access to the latest
+    */
     this._userManager.events.addUserLoaded(args => {
       this._userManager.getUser().then(user => {
         this._user = user;
