@@ -22,6 +22,13 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    /***** Not the best way to read query params but anyway Brian did this .. */
+    /*** if this is true that means based on how we have configured, that we have just been redirected here by IdentityServer4 
+         after the user logged out
+         so, we should call the signoutRedirectCallback() method which deletes the goodies that was saved in storage
+         To see the entire flow, see what happens when the user clicks the logout button and then see the configuration that
+         has the postlogoutredirect uri specified to be the root of the angular app, which means this component.
+    */
     if (window.location.href.indexOf('?postLogout=true') > 0) {
       this._authService.signoutRedirectCallback().then(() => {
         let url: string = this._router.url.substring(
