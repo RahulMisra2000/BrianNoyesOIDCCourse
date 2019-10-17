@@ -6,7 +6,7 @@
   var config = { userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })  };  /* use LocalStorage and not sessionStorage(default)*/
   var mgr = new Oidc.UserManager(config);
 
-  mgr.signinRedirectCallback().then(() => {   /* harvest the goodies */
+  mgr.signinRedirectCallback().then(() => {   /* harvest the goodies. IdentityServer4 sends it as URL parameters */
         window.history.replaceState({}, window.document.title,  window.location.origin);  /* make sure user cannot back into this page */
         window.location = "/";                                                            /* CLIENT SIDE REDIRECTION into angular root */
     }, error => {
