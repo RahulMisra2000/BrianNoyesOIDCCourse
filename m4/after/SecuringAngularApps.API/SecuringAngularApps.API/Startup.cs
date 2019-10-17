@@ -35,15 +35,17 @@ namespace SecuringAngularApps.API
                     .AllowCredentials();
                 });
             });
+            /* Configuring the middleware that will check for the jwt token ********************************************************** */
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                  .AddJwtBearer(options =>
                  {
                      // base-address of your identityserver
                      options.Authority = "https://securingangularappscourse-sts.azurewebsites.net/";
-                     options.RequireHttpsMetadata = false;
-                     // name of the API resource
-                     options.Audience = "projects-api";
+                     options.RequireHttpsMetadata = false;      // good during development ... no https required 
+                     options.Audience = "projects-api";         // name of the API resource
+                     // You can check for other stuff https://developer.okta.com/blog/2018/03/23/token-authentication-aspnetcore-complete-guide
                  });
+            /* Configuring the middleware that will check for the jwt token ********************************************************** */
 
             services.AddMvc();
         }
@@ -56,7 +58,10 @@ namespace SecuringAngularApps.API
                 app.UseDeveloperExceptionPage();
             }
             app.UseCors("AllRequests");
+            
+            /* Adding the middleware (that checks for jwt) to the pipeline ********************************************************** */
             app.UseAuthentication();
+            
             app.UseMvc();
         }
     }
