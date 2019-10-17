@@ -22,6 +22,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    /* WE COME HERE under two scenarios : The user starts the application OR IdentityServer4 redirects here AFTER 
+       the user logs out because in the configuration we provided the root of Angular app as the post-logout redirect URI
+    */
+    
     /***** Not the best way to read query params but anyway Brian did this .. */
     /*** if this is true that means based on how we have configured, that we have just been redirected here by IdentityServer4 
          after the user logged out
