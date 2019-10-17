@@ -1,14 +1,14 @@
+<!-- Note this is a standalone .html page and it wants to use the oidc-client.js library so we are pulling it in via CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/oidc-client/1.4.1/oidc-client.min.js"></script>
+
+
 <script>
-  var config = {
-    userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })
-  };
+  var config = { userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })  };  /* use LocalStorage and not sessionStorage(default)*/
   var mgr = new Oidc.UserManager(config);
-  mgr.signinRedirectCallback().then(() => {
-        window.history.replaceState({},
-            window.document.title,
-            window.location.origin);
-        window.location = "/";
+
+  mgr.signinRedirectCallback().then(() => {   /* harvest the goodies */
+        window.history.replaceState({}, window.document.title,  window.location.origin);  /* make sure user cannot back into this page */
+        window.location = "/";                                                            /* CLIENT SIDE REDIRECTION into angular root */
     }, error => {
         console.error(error);
     });
