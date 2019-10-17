@@ -8,24 +8,47 @@ import { AuthContext } from '../model/auth-context';
 
 @Injectable()
 export class AuthService {
+  
+  /* we use this userManager mostly to talk to the IdentityServer4 and to manage the tokens  */
   private _userManager: UserManager;
+  
+  /* we access the goodies through this object */
   private _user: User;
+  
+  
   authContext: AuthContext;
 
   constructor(private httpClient: HttpClient) {
     Log.logger = console;
+    
     var config = {
-      authority: Constants.stsAuthority,
-      client_id: Constants.clientId,
-      redirect_uri: `${Constants.clientRoot}assets/oidc-login-redirect.html`,
-      scope: 'openid projects-api profile',
-      response_type: 'id_token token',
-      post_logout_redirect_uri: `${Constants.clientRoot}?postLogout=true`,
-      userStore: new WebStorageStateStore({ store: window.localStorage }),
-      automaticSilentRenew: true,
-      silent_redirect_uri: `${Constants.clientRoot}assets/silent-redirect.html`
+      
+          authority: Constants.stsAuthority,    /* IdentityServer4 */
+          client_id: Constants.clientId,        /* identifies the angular spa */
+
+          /* Where do you want the IdentityServer4 to redirect back to you after you call the signinRedirect()  ******************* */
+          redirect_uri: `${Constants.clientRoot}assets/oidc-login-redirect.html`,
+          /* In this html file we harvest the goodies and they are saved in localStorage */
+
+          /* Requested Scopes */
+          scope: 'openid projects-api profile',
+
+          /* Implicit flow */
+          response_type: 'id_token token',
+
+          /* Where do you want the IdentityServer4 to redirect back to you after you call the signoutRedirect()  ******************* */
+          post_logout_redirect_uri: `${Constants.clientRoot}?postLogout=true`,
+
+          /***** save the goodies in localStorage and not sessionStorage(default) *********** */
+          userStore: new WebStorageStateStore({ store: window.localStorage }),
+
+          automaticSilentRenew: true,
+          silent_redirect_uri: `${Constants.clientRoot}assets/silent-redirect.html`
     };
+    
+    
     this._userManager = new UserManager(config);
+    
     this._userManager.getUser().then(user => {
       if (user && !user.expired) {
         this._user = user;
@@ -57,6 +80,7 @@ export class AuthService {
   }
 
   signoutRedirectCallback(): Promise<any> {
+    /* This cleans up the goodies from the storage ******************************/
     return this._userManager.signoutRedirectCallback();
   }
 
