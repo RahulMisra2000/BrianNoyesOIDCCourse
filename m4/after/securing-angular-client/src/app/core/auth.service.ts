@@ -19,7 +19,7 @@ export class AuthService {
   authContext: AuthContext;
 
   constructor(private httpClient: HttpClient) {
-    Log.logger = console;
+    Log.logger = console;                         //*** This is great if you want to see logging messages from the oidc-client.js library
     
     var config = {
       
