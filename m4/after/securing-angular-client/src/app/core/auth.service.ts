@@ -59,6 +59,9 @@ export class AuthService {
     /**** Anytime the oidc-client.js gets hold of a set of tokens (either when you login or if an automatic silent renew happens)
           it raises the assUserLoaded event and we can provide an event handler which can take the new user object (it has all the 
           goodies) and place it in a property in our service (_user) so anyone interested can have access to the latest
+          
+          Other events raised that we can write event handlers for is listed in the docs here
+          https://github.com/IdentityModel/oidc-client-js/wiki#events
     */
     this._userManager.events.addUserLoaded(args => {
       this._userManager.getUser().then(user => {
@@ -89,6 +92,10 @@ export class AuthService {
     return this._userManager.signoutRedirectCallback();
   }
 
+  /* **** Here basically we are calling an endpoint on our Resource Server (RS) and that endpoint returns all the claims, etc
+          which we then use in this angular app to customize what can and cannot be seen in the UI and we also use that 
+          information to build route guards
+  */
   loadSecurityContext() {
     this.httpClient.get<AuthContext>(`${Constants.apiRoot}Account/AuthContext`).subscribe(context => {
       this.authContext = context;
