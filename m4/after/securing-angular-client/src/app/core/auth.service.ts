@@ -49,12 +49,14 @@ export class AuthService {
     
     this._userManager = new UserManager(config);
     
+    /* When angular app starts get the goodies from the storage. We get it in user object ********* */
     this._userManager.getUser().then(user => {
       if (user && !user.expired) {
         this._user = user;
         this.loadSecurityContext();
       }
     });
+    
     
     /**** Anytime the oidc-client.js gets hold of a set of tokens (either when you login or if an automatic silent renew happens)
           it raises the assUserLoaded event and we can provide an event handler which can take the new user object (it has all the 
