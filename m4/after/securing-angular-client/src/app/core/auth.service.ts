@@ -94,9 +94,15 @@ export class AuthService {
     return this._userManager.signoutRedirectCallback();
   }
 
-  /* **** Here basically we are calling an endpoint on our Resource Server (RS) and that endpoint returns all the claims, etc
-          which we then use in this angular app to customize what can and cannot be seen in the UI and we also use that 
+  /* **** Here basically we are calling an endpoint on our Resource Server (RS) and that endpoint returns all the claims that 
+          it finds inside the AT, etc. 
+          this info is then used by angular app to customize what can and cannot be seen in the UI and we also use that 
           information to build route guards
+          
+          I wonder why not just read the claims from the goodies since it is already in storage here in the browser. 
+          Why go all the way to the Resource Server and get it from there. I sent Brian a question about this.
+          Let's see what he says. Because a hacker can change the claims anyway in the developer console and customize the UI ...
+          OF COURSE that has NO meaningful effect because the real authorization is happening on the Resource Server .. I get that !
   */
   loadSecurityContext() {
     this.httpClient.get<AuthContext>(`${Constants.apiRoot}Account/AuthContext`).subscribe(context => {
